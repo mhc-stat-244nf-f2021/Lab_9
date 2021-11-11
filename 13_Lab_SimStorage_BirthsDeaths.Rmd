@@ -112,7 +112,7 @@ SIR_simulation <- function(N, S0, I0, R_0, D, Time, nItr){
 **Do the same thing, but increase the number of iterations to 500. Name this test2.**
 
 ```{r}
-tmp <- SIR_simulation(N=1000, S0=999, I0=1, R_0=2, D=3, Time=50, nItr=500)
+
 ```
 
 **Do the same thing, but increase the number of iterations to 500 and the time to 50. Name this test3. You might notice that this takes slightly longer. This is something to note with these methods. Depending on how complex your model is and how many iterations and time points you consider, running simulations can take a lot of time.**
@@ -120,6 +120,21 @@ tmp <- SIR_simulation(N=1000, S0=999, I0=1, R_0=2, D=3, Time=50, nItr=500)
 ```{r}
 
 ```
+
+## Reshaping data
+
+We have been manually converting our data frames for our compartmental models (e.g., `SIR_df` in the function `SIR_simulation`) from a form that has a column for each compartment (imperfectly speaking, "wide form" data) to a form that has a single column that specifies the compartment (called `compartment`) and a single column that specifies the number in the compartment, as well as a time column. There are various packages and functions that streamline this change, including the `melt` function in the reshape2 package, as well as the `gather` function in the tidyr package (http://www.cookbook-r.com/Manipulating_data/Converting_data_between_wide_and_long_format/). Modify the `SIR_simulation` function to return a data frame that you have manipulated using one of these methods. 
+
+```{r}
+
+```
+
+Test your function using one of the sets of arguments from above and plot your results. If you have used either melt or gather correctly when converting your data frame inside your function, then the data frame your function returns will be ready for plotting.
+
+```{r}
+
+```
+
 
 ## Births and Deaths in a Stochastic Compartmental Model
 
@@ -135,16 +150,16 @@ As a refresher, the difference equations for a stochastic SIR model with births 
 $$
 S_{t}=S_{t-1}-I^{(SI)}_t+B_t-M^S_t
 $$
-where $B_t$ is a random variable for the number of births at time $t$ and follows either a $Poisson(\beta\times N_t)$ ($\beta$ is the per capita birth rate) or a $Binomial(N_t, \beta)$. $M_t^S$ is a random variable for the number of deaths from the susceptible compartment at time $t$ and follows a $Binomial(S_t,\mu)$ distribution ($\mu$ is the mortality rate for the population).
+where $B_t$ is a random variable for the number of births at time $t$ and follows either a $Poisson(\beta\times N_t)$ ($\beta$ is the per capita birth rate) or a $Binomial(N_t, \beta)$. $M_t^S$ is a random variable for the number of deaths from the susceptible compartment at time $t$ and follows a $Binomial(S_{t-1},\mu)$ distribution ($\mu$ is the mortality rate for the population).
 
 $$
 I_t=I_{t-1}+I_t^{(SI)}-R^{(IR)}_t-M_t^I
 $$
-where $M_t^I$ is a random variable for the number of deaths from the infectious compartment at time $t$ and follows a $Binomial(I_t, \mu^I)$ distribution ($\mu^I$ is the mortality rate for infectious individuals based on the infection).
+where $M_t^I$ is a random variable for the number of deaths from the infectious compartment at time $t$ and follows a $Binomial(I_{t-1}, \mu^I)$ distribution ($\mu^I$ is the mortality rate for infectious individuals based on the infection).
 
 $$R_t=R_{t-1}+R^{(IR)}_t-M_t^R$$
 
-where $M_t^R$ is a random variable for the number of deaths from the susceptible compartment at time $t$ and follows a $Binomial(R_t,\mu)$ distribution ($\mu$ is the mortality rate for the population).
+where $M_t^R$ is a random variable for the number of deaths from the susceptible compartment at time $t$ and follows a $Binomial(R_{t-1},\mu)$ distribution ($\mu$ is the mortality rate for the population).
 
 ```{r}
 SIR_simulation_birth_death <- function(N0, S0, I0, R_0, D, Time){
@@ -180,17 +195,18 @@ SIR_simulation_birth_death <- function(N0, S0, I0, R_0, D, Time){
 }
 ```
 
+Test your function to make sure it works. You will need to choose values for the birth rate and mortality rates. What are reasonable numbers for this?
+
+```{r}
+
+```
+
+
 Modify the function above (again) to accommodate multiple simulations. Basically you are combining things that we did for the `SIR_simulation` and `SIR_simulation_birth_death` functions.
 
 ```{r}
 
 ```
 
-## Reshaping data
 
-We have been manually converting our data frames for our compartmental models (e.g., `SIR_df` in the function `SIR_simulation`) from a form that has a column for each compartment (imperfectly speaking, "wide form" data) to a form that has a single column that specifies the compartment (called `compartment`) and a single column that specifies the number in the compartment, as well as a time column. There are various packages and functions that streamline this change, including the `melt` function in the reshape2 package, as well as the `gather` function in the tidyr package (http://www.cookbook-r.com/Manipulating_data/Converting_data_between_wide_and_long_format/). Modify the `SIR_simulation` function to return a data frame that you have manipulated using one of these methods. 
-
-```{r}
-
-```
 
