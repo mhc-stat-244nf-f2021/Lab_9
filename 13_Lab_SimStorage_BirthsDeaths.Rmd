@@ -53,7 +53,7 @@ df3
 set.seed(121)
 df4 <- data.frame(time=0:5, a=rbinom(n=6, size=10, prob=0.2))
 df5 <- data.frame(time=6:10, b=rbinom(n=5, size=10, prob=0.3))
-df6 <- rbind(df1, df2)
+df6 <- rbind(df4, df5)
 df6
 ```
 **You should get an error when you run the last chunk of code above. What is the problem? What does this tell you about the requirements for using rbind with data frames?**
